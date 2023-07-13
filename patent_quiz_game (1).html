@@ -1,0 +1,163 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>US Patent Laws Quiz Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #007BFF;
+        }
+        .question {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+        .answer {
+            margin-bottom: 20px;
+        }
+        .btn {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .score {
+            font-size: 1.5em;
+            margin-top: 20px;
+            text-align: center;
+            color: #007BFF;
+        }
+        .feedback {
+            font-size: 2em;
+            margin-top: 10px;
+        }
+        .correct {
+            color: green;
+        }
+        .incorrect {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>US Patent Laws Quiz Game</h1>
+        <p class="question"></p>
+        <div class="answers"></div>
+        <p class="score"></p>
+        <p class="feedback"></p>
+    </div>
+    <script>
+        const questions = [
+            { q: "Which of the following is a major change introduced by the America Invents Act (AIA)?", 
+              a: ["First to file system", "Lower patent application fees", "Longer patent terms", "Easier to invalidate patents"], 
+              correct: 0 },
+            { q: "When did the first-inventor-to-file provisions of the AIA become effective?", 
+              a: ["January 1, 2013", "March 16, 2013", "September 16, 2011", "December 10, 2011"], 
+              correct: 1 },
+            { q: "Under the AIA's first-inventor-to-file system, a patent is awarded to:", 
+              a: ["The first person to conceive of the invention", "The first person to file a patent application", "The first person to constructively reduce the invention to practice", "The first person to actually reduce the invention to practice"], 
+              correct: 0 },
+            { q: "Which of the following is NOT patentable subject matter under US patent law?", 
+              a: ["A new chemical composition", "A literary work", "A manufacturing process", "A machine"], 
+              correct: 1 },
+            { q: "According to the data, which Supreme Court case addressed the patentability of isolated DNA sequences?", 
+              a: ["Mayo v. Prometheus", "Bilski v. Kappos", "Association for Molecular Pathology v. Myriad Genetics", "Alice Corp v. CLS Bank"], 
+              correct: 2 },
+            { q: "The America Invents Act made tax strategies unpatentable. True or False?", 
+              a: ["True", "False"], 
+              correct: 0 },
+            { q: "Who qualifies as an inventor under US patent law?", 
+              a: ["Anyone who contributes ideas to the invention", "Anyone who provides funding for development of the invention", "The person who first conceives the complete invention", "The person who first constructs the invention"], 
+              correct: 2 },
+            { q: "Under the AIA, a one year grace period applies to:", 
+              a: ["Prior art disclosures by the inventor", "Prior art disclosures by a third party", "Prior public uses of the invention", "All of the above"], 
+              correct: 3 },
+            { q: "Which type of disclosure qualified as prior art under pre-AIA patent law?", 
+              a: ["An inventor's publication published more than one year before filing", "A third party's patent filed before the inventor's conception date", "A prior public use of the invention outside the US", "None of the above"], 
+              correct: 1 },
+            { q: "Which of the following can help overcome an obviousness rejection?", 
+              a: ["Showing commercial success of the invention", "Evidence of failure of others to solve the problem", "Demonstrating unexpected results compared to the prior art", "All of the above"], 
+              correct: 3 }
+        ];
+
+        let score = 0;
+        let currentQuestion = 0;
+
+        function showQuestion() {
+            if (currentQuestion === questions.length) {
+                showScore();
+            } else {
+                const questionText = document.querySelector('.question');
+                questionText.textContent = questions[currentQuestion].q;
+
+                const answersDiv = document.querySelector('.answers');
+                answersDiv.innerHTML = '';
+                for (let i = 0; i < questions[currentQuestion].a.length; i++) {
+                    const button = document.createElement('button');
+                    button.textContent = questions[currentQuestion].a[i];
+                    button.className = 'btn';
+                    button.addEventListener('click', checkAnswer);
+                    answersDiv.appendChild(button);
+                }
+            }
+        }
+
+        function checkAnswer(e) {
+            const index = questions[currentQuestion].a.findIndex(answer => answer === e.target.textContent);
+            const feedbackDiv = document.querySelector('.feedback');
+            feedbackDiv.innerHTML = '';
+            if (index === questions[currentQuestion].correct) {
+                score++;
+                feedbackDiv.textContent = '✓';
+                feedbackDiv.className = 'feedback correct';
+            } else {
+                feedbackDiv.textContent = '✗';
+                feedbackDiv.className = 'feedback incorrect';
+            }
+            updateScore();
+            currentQuestion++;
+            setTimeout(showQuestion, 1000);
+        }
+
+        function showScore() {
+            const scoreText = document.querySelector('.score');
+            scoreText.textContent = `Your final score is ${score} out of ${questions.length}`;
+        }
+
+        function updateScore() {
+            const scoreText = document.querySelector('.score');
+            scoreText.textContent = `Score: ${score}`;
+        }
+
+        showQuestion();
+    </script>
+</body>
+</html>
